@@ -12,17 +12,17 @@ npm start
 
 Abra `http://localhost:3000`. Sem chave de API, o painel abre em modo local: tarefas e narração no dispositivo funcionam, enquanto respostas inteligentes aguardam configuração.
 
-Para ativar a conversa, defina `OPENAI_API_KEY` **no ambiente do servidor** (nunca no navegador) e, opcionalmente, `OPENAI_MODEL`:
+Para ativar a conversa com Groq, defina `GROQ_API_KEY` **no ambiente do servidor** (nunca no navegador) e, opcionalmente, `GROQ_MODEL`. O padrão é `openai/gpt-oss-20b`:
 
 ```bash
 # Linux / macOS
-OPENAI_API_KEY=sua-chave npm start
+GROQ_API_KEY=sua-chave npm start
 
 # PowerShell
-$env:OPENAI_API_KEY="sua-chave"; npm start
+$env:GROQ_API_KEY="sua-chave"; npm start
 ```
 
-O servidor envia somente as mensagens da conversa ao endpoint configurado. O histórico e as preferências são guardados no `localStorage` deste navegador. Limpe os dados do site para apagá-los.
+O servidor envia somente as mensagens da conversa à API Groq. Na Vercel, cadastre `GROQ_API_KEY` em **Project Settings → Environment Variables** e faça um novo deploy. O histórico e as preferências ficam no `localStorage` deste navegador. Limpe os dados do site para apagá-los.
 
 ## Recursos desta versão
 

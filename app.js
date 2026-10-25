@@ -31,3 +31,21 @@ $('#save-settings').addEventListener('click',e=>{e.preventDefault();prefs={name:
 document.querySelectorAll('[data-prompt]').forEach(button=>button.addEventListener('click',()=>{}));
 const date=new Date();$('#today-date').textContent=new Intl.DateTimeFormat('pt-BR',{weekday:'short',day:'numeric',month:'long'}).format(date).replace('.','');
 setName();renderMessages();renderTasks();loadVoices();if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=loadVoices;
+
+let wakeLock = null;
+let installPrompt = null;
+const awakeButton = $('#keep-awake');
+const installButton = $('#install-app');
+async function enableWakeLock() {
+  if (!('wakeLock' in navigator)) { showToast('Este navegador não oferece tela ativa. Ajuste o tempo de bloqueio nas configurações do tablet.'); return; }
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    awakeButton.classList.add('selected'); awakeButton.setAttribute('aria-pressed','true'); awakeButton.textContent='◉ Tela ativa';
+    wakeLock.addEventListener('release',()=>{wakeLock=null;awakeButton.classList.remove('selected');awakeButton.setAttribute('aria-pressed','false');awakeButton.textContent='◐ Tela ativa'});
+  } catch { showToast('Não foi possível manter a tela ativa. Deixe o JARVIS em primeiro plano e tente novamente.'); }
+}
+awakeButton?.addEventListener('click',()=>wakeLock ? wakeLock.release() : enableWakeLock());
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&awakeButton?.getAttribute('aria-pressed')==='true'&&!wakeLock)enableWakeLock()});
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;installButton?.classList.add('available')});
+installButton?.addEventListener('click',async()=>{if(installPrompt){installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;return}showToast(/iPhone|iPad/i.test(navigator.userAgent)?'No Safari, toque em Compartilhar e depois em Adicionar à Tela de Início.':'No menu do navegador, escolha “Instalar app” ou “Adicionar à tela inicial”.')});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));

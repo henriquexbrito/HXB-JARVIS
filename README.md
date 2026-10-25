@@ -30,10 +30,15 @@ O servidor envia somente as mensagens da conversa à API Groq. Na Vercel, cadast
 - Reconhecimento de fala pelo navegador (Chrome/Edge normalmente oferecem suporte; requer permissão de microfone e contexto seguro).
 - Leitura de respostas e narração de textos com vozes instaladas no dispositivo.
 - Lista de tarefas salva localmente.
-- Interface preparada para e-mail, WhatsApp, Telegram e Home Assistant, identificados como **não conectados**.
+- Atalhos de instalação PWA e bloqueio de tela ativa para uso contínuo em tablet.
+- Interface para Instagram, TikTok, YouTube, e-mail, WhatsApp, Telegram e Home Assistant, todos identificados como **não conectados** até configurar OAuth/API oficial.
 
 ## Integrações ainda necessárias
 
-E-mail requer OAuth do Google com escopo mínimo de leitura, fluxo de autorização no servidor e armazenamento seguro de tokens. WhatsApp requer a API oficial da Meta e configuração de webhook; Telegram requer um bot e token protegidos no servidor. Nenhuma dessas integrações está ativa nesta versão, e o app não simula acesso a mensagens nem envia respostas. A clonagem de voz também exige um provedor de voz e consentimento explícito do titular.
+Instagram, TikTok e YouTube exigem apps de desenvolvedor e OAuth oficial, permissões aprovadas e armazenamento seguro de tokens; a publicação e as respostas devem pedir confirmação. E-mail requer OAuth do Google com escopo mínimo de leitura. WhatsApp requer a API oficial da Meta e webhook; Telegram requer um bot protegido. Essas integrações ainda não estão ativas. A clonagem de voz também exige um provedor especializado e consentimento explícito do titular.
 
 Antes de publicar, configure a chave do modelo como segredo de ambiente no host. Não coloque credenciais em arquivos do frontend, no Git ou em `localStorage`.
+
+## Uso contínuo no tablet
+
+Abra o domínio da Vercel no Chrome/Edge do tablet e escolha **Instalar app** (ou **Adicionar à tela inicial** no menu). No Safari do iPad, use **Compartilhar → Adicionar à Tela de Início**. O botão **Tela ativa** solicita ao navegador que evite apagar o ecrã enquanto o JARVIS estiver visível. Para operação longa, mantenha o tablet ligado à energia e permita que o navegador fique em primeiro plano. O service worker mantém a interface estática disponível em cache, mas o chat precisa de internet.
